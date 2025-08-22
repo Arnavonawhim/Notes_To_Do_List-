@@ -6,11 +6,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
-// using better-sqlite3 for synchronous queries, easier for this small app
+//using better-sqlite3 for synchronous queries
 const db = require('better-sqlite3')('users.db');
 
 // --- Database Setup ---
-// Let's make sure our tables exist on startup.
+//making sure our tables exist on startup.
 const usersSchema = `
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,16 +40,12 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key_change_in_pr
 
 app.post('/signup', async (req, res) => {
   const { username, password } = req.body;
-
-  // TODO: Add more robust validation here (e.g., password complexity)
   if (!username || !password) {
     return res.status(400).json({ message: 'Username and password are required.' });
   }
-
   try {
     const saltRounds = 10; // Increased salt rounds from 8 for better security
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-
     const statement = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)');
     statement.run(username, hashedPassword);
     res.status(201).json({ message: 'User created successfully!' });
@@ -65,29 +61,22 @@ app.post('/signup', async (req, res) => {
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
-
   const passwordIsValid = user ? bcrypt.compareSync(password, user.password) : false;
-
   if (!user || !passwordIsValid) {
-    return res.status(401).json({ message: 'Incorrect credentials, please try again.' });
-  }
-
+    return res.status(401).json({ message: 'Incorrect credentials, please try again.' });}
   const payload = { id: user.id, username: user.username };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
   res.json({ token });
 });
 
-
-// --- Middleware for protecting routes ---
+// --- Middleware ---
 function authenticateToken(req, res, next) {
   // The token is expected to be in the 'Authorization: Bearer <TOKEN>' header
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-
   if (token == null) {
     return res.status(401).send({ message: 'Access denied. No token provided.' });
   }
-
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
       console.error('JWT verification error:', err.message);
@@ -99,25 +88,20 @@ function authenticateToken(req, res, next) {
   });
 }
 
-
 // --- Video Routes (Protected) ---
-
 app.post('/vids', authenticateToken, (req, res) => {
   const { title, url } = req.body;
   if (!title || !url) {
-    return res.status(400).json({ message: 'Title and URL are required.' });
-  }
+    return res.status(400).json({ message: 'Title and URL are required.' });}
   const statement = db.prepare('INSERT INTO videos (title, url) VALUES (?, ?)');
   const info = statement.run(title, url);
   console.log(`Video added by user ${req.user.username}. ID: ${info.lastInsertRowid}`);
   res.status(201).json({ id: info.lastInsertRowid, title, url });
 });
-
 app.get('/vids', authenticateToken, (req, res) => {
   const videos = db.prepare('SELECT * FROM videos').all();
   res.json(videos);
 });
-  
 app.delete('/vids/:id', authenticateToken, (req, res) => {
   const { id } = req.params;
   const info = db.prepare('DELETE FROM videos WHERE id = ?').run(id);
@@ -129,8 +113,7 @@ app.delete('/vids/:id', authenticateToken, (req, res) => {
   }
 });
 
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is startingg ${PORT}`);
+  console.log(`Server is startingg at port ${PORT}`);
 });

@@ -15,16 +15,12 @@ const usersSchema = `
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL
-  )
-`;
+    password TEXT NOT NULL)`;
 const videosSchema = `
   CREATE TABLE IF NOT EXISTS videos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
-    url TEXT NOT NULL
-  )
-`;
+    url TEXT NOT NULL)`;
 db.exec(usersSchema);
 db.exec(videosSchema);
 
@@ -117,3 +113,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is startingg at port ${PORT}`);
 });
+

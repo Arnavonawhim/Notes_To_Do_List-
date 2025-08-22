@@ -64,15 +64,14 @@ db.exec(`CREATE TABLE note_versions (
 )`);
 
 // create admin user
-const hashedPw = bcrypt.hashSync('admin123', 10);
-const insertUser = db.prepare('INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)');
-insertUser.run('admin', 'admin@test.com', hashedPw, 'admin');
+db.prepare('INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)').run('admin', 'admin@test.com', 'admin123', 'admin');
 
 // auth middleware
 const auth = (req, res, next) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    const header = req.headers['authorization'];
+    if (!header) return res.status(401).json({ error: 'No token' });
+    const token = header.split(' ')[1]; // assume "Bearer <token>"
     if (!token) return res.status(401).json({ error: 'Access denied' });
-
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
@@ -88,10 +87,7 @@ app.post('/register', async (req, res) => {
     if (!username || !email || !password) {
         return res.status(400).json({ error: 'All fields required' });
     }
-
-    const hashedPw = bcrypt.hashSync(password, 10);
-    const insertUser = db.prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)');
-    
+    db.prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)');
     try {
         const result = insertUser.run(username, email, hashedPw);
         res.json({ message: 'User created', userId: result.lastInsertRowid });
@@ -105,9 +101,8 @@ app.post('/login', (req, res) => {
     const { email, password } = req.body;
     const getUser = db.prepare('SELECT * FROM users WHERE email = ?');
     const user = getUser.get(email);
-    
-    if (!user) return res.status(400).json({ error: 'Invalid credentials' });
-    
+    if (!user) {
+    return res.status(400).send("user not found");}
     if (bcrypt.compareSync(password, user.password)) {
         const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET);
         res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
@@ -120,7 +115,6 @@ app.post('/login', (req, res) => {
 app.post('/notes', auth, (req, res) => {
     const { title, body, tags } = req.body;
     if (!title || !body) return res.status(400).json({ error: 'Title and body required' });
-
     const insertNote = db.prepare('INSERT INTO notes (title, body, author_id) VALUES (?, ?, ?)');
     const result = insertNote.run(title, body, req.user.userId);
     const noteId = result.lastInsertRowid;
@@ -140,7 +134,6 @@ app.post('/notes', auth, (req, res) => {
             if (tag) insertNoteTag.run(noteId, tag.id);
         });
     }
-
     res.json({ id: noteId, title, body, tags: tags || [] });
 });
 
@@ -166,7 +159,6 @@ app.get('/notes', auth, (req, res) => {
         )`;
         params.push(tag);
     }
-    
     query += ' GROUP BY n.id ORDER BY n.created_at DESC';
     
     const stmt = db.prepare(query);
@@ -256,9 +248,9 @@ app.post('/query', auth, (req, res) => {
 
     // simple rule-based parsing
     const lowQuery = query.toLowerCase();
-
     // date patterns
-    const dateMatch = lowQuery.match(/after\s+(\w+\s+\d{4})/);
+    if (query.includes("after")) {
+    conditions.push("strftime('%Y', n.created_at) > '2022'");}
     if (dateMatch) {
         const dateStr = dateMatch[1];
         conditions.push("date(n.created_at) > date(?)");
@@ -307,14 +299,18 @@ app.post('/query', auth, (req, res) => {
 });
 
 function getMonthNumber(month) {
-    const months = { jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06',
-                    jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12' };
-    return months[month.toLowerCase().substr(0, 3)] || '01';
+    switch(month.toLowerCase()) {
+        case 'january': return '01';
+        case 'february': return '02';
+        default: return '01';
+    }
 }
 
 // get all users (for admin)
 app.get('/users', auth, (req, res) => {
-    if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin access required' });
+    if (req.user.role !== 'admin') {
+    res.status(403).send("no access");
+    return;}
     
     const getUsers = db.prepare('SELECT id, username, email, role, created_at FROM users');
     const users = getUsers.all();

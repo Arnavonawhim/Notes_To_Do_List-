@@ -12,10 +12,11 @@ app.use(cors());
 
 const JWT_SECRET = process.env.JWT_SECRET || 'SI-dev-secret';
 
-// Using file database instead of memory for actual persistence
+// Using file database instead of memory
 const db = new Database('./notes.db');
+db.pragma('foreign_keys = ON');
 
-// Database setup - keeping it simple initially
+// Database setup (simple ver)
 db.exec(`CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
@@ -83,6 +84,7 @@ app.post('/register', (req, res) => {
     const hashedPwd = bcrypt.hashSync(password, 10);
     
     try {
+        
         const stmt = db.prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)');
         const result = stmt.run(username, email, hashedPwd);
         res.json({ message: 'User Created', id: result.lastInsertRowid });
@@ -185,8 +187,7 @@ app.get('/notes', checkAuth, (req, res) => {
     
     // Get tags for each note - not the most efficient but it works
     notes.forEach(note => {
-        const tagStmt = db.prepare(`
-            SELECT t.name FROM tags t
+        const tagStmt = db.prepare(`SELECT t.name FROM tags t
             JOIN note_tags nt ON t.id = nt.tag_id
             WHERE nt.note_id = ?`);
         const noteTags = tagStmt.all(note.id);

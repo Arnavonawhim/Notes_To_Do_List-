@@ -1,84 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interface for Notes App</title>
+    <title>Notes App</title>
     <style>
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial;
             margin: 0;
             padding: 20px;
             background-color: #8563ff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgb(6, 6, 6);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .hidden {
             display: none;
         }
 
-        .note-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .btn-secondary {
-            background: #272727;
-        }
-
-        textarea {
-            height: 120px;
-            resize: vertical;
-        }
-
-        button:hover {
-            background: #98a1ff;
-            cursor: pointer;
+        .auth-section {
+            background: #9f87ff;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
         }
 
         .form-group {
             margin-bottom: 15px;
         }
 
-        .note-item {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            background: white;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            color:white;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-
-        .note-meta {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .search-box {
-            display: inline-block;
-            margin-left: 20px;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
 
         input[type="text"], input[type="email"], input[type="password"], textarea {
@@ -90,19 +52,9 @@
             box-sizing: border-box;
         }
 
-        .btn-danger {
-            background: #dc3545;
-        }
-
-        .close {
-            float: right;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .success {
-            color: #28a745;
-            margin: 10px 0;
+        textarea {
+            height: 120px;
+            resize: vertical;
         }
 
         button {
@@ -116,17 +68,48 @@
             margin-bottom: 10px;
         }
 
-        .auth-section {
-            background: #9f87ff;
-            color: white;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+        button:hover {
+            background: #98a1ff;
         }
 
-        .error {
-            color: #dc3545;
-            margin: 10px 0;
+        .btn-secondary {
+            background: #272727;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .note-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .note-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
         }
 
         .note-body {
@@ -134,41 +117,14 @@
             line-height: 1.5;
         }
 
-        .btn-secondary:hover {
-            background: #545b62;
+        .note-meta {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
         }
 
-        .modal-content {
-            background: rgb(159, 100, 255);
-            color:white;
-            margin: 50px auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgb(6, 6, 6);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .search-box input {
-            width: 300px;
+        .note-tags {
+            margin-bottom: 10px;
         }
 
         .tag {
@@ -180,8 +136,51 @@
             margin-right: 5px;
         }
 
-        .note-tags {
-            margin-bottom: 10px;
+        .search-box {
+            display: inline-block;
+            margin-left: 20px;
+        }
+
+        .search-box input {
+            width: 300px;
+        }
+
+        .success {
+            color: #28a745;
+            margin: 10px 0;
+        }
+
+        .error {
+            color: #dc3545;
+            margin: 10px 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgb(159, 100, 255);
+            color: white;
+            margin: 50px auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -202,8 +201,8 @@
                     <label>Password:</label>
                     <input type="password" id="loginPassword" placeholder="Enter password">
                 </div>
-                <button onclick="login()">Login</button>
-                <button onclick="showRegister()" class="btn-secondary">Need to register?</button>
+                <button onclick="doLogin()">Login</button>
+                <button onclick="showRegisterForm()" class="btn-secondary">Need to register?</button>
             </div>
             
             <div id="registerForm" class="hidden">
@@ -220,8 +219,8 @@
                     <label>Password:</label>
                     <input type="password" id="regPassword" placeholder="Choose password">
                 </div>
-                <button onclick="register()">Register</button>
-                <button onclick="showLogin()" class="btn-secondary">Back to Login</button>
+                <button onclick="doRegister()">Register</button>
+                <button onclick="showLoginForm()" class="btn-secondary">Back to Login</button>
             </div>
         </div>
         
@@ -231,15 +230,15 @@
                 <h1>My Notes</h1>
                 <div>
                     <span id="userInfo"></span>
-                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                    <button onclick="doLogout()" class="btn-secondary">Logout</button>
                 </div>
             </div>
             
             <!-- Create Note -->
             <div class="form-group">
-                <button onclick="showCreateNote()">New Note</button>
-                <div class="search-box" style="display: inline-block; margin-left: 20px;">
-                    <input type="text" id="searchInput" placeholder="Search notes..." onkeyup="searchNotes()">
+                <button onclick="showNewNote()">New Note</button>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search notes..." onkeyup="doSearch()">
                 </div>
             </div>
             
@@ -257,8 +256,8 @@
                     <label style="color:white;">Tags:</label>
                     <input type="text" id="noteTags" placeholder="e.g. work, important, todo">
                 </div>
-                <button onclick="createNote()">Save Note</button>
-                <button onclick="hideCreateNote()" class="btn-secondary">Cancel</button>
+                <button onclick="saveNote()">Save Note</button>
+                <button onclick="hideNewNote()" class="btn-secondary">Cancel</button>
             </div>
             
             <div id="notesContainer">
@@ -270,7 +269,7 @@
     <!-- Edit Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeEditModal()">&times;</span>
+            <span class="close" onclick="closeEdit()">&times;</span>
             <h3>Edit Note</h3>
             <div class="form-group">
                 <label>Title:</label>
@@ -282,231 +281,300 @@
             </div>
             <div class="form-group">
                 <label>Tags:</label>
-                <input type="text" id="editTagsInput" placeholder="e.g. work, important, todo">
+                <input type="text" id="editTags" placeholder="e.g. work, important, todo">
             </div>
-            <button onclick="updateNote()">Update</button>
-            <button onclick="closeEditModal()" class="btn-secondary">Cancel</button>
+            <button onclick="saveEdit()">Update</button>
+            <button onclick="closeEdit()" class="btn-secondary">Cancel</button>
         </div>
     </div>
 
     <script>
-        // Note: In a real application, you would use a backend server
-        // This is a simplified demo that stores data in memory
-        let mockUsers = [];
-        let mockNotes = [];
-        let mockNoteId = 1;
-        let authToken = null;
-        let currentUser = null;
-        let editingNoteId = null;
+        // just store everything in arrays for now
+        var allUsers = [];
+        var allNotes = [];
+        var nextNoteId = 1;
+        var currentToken = null;
+        var loggedInUser = null;
+        var editingNoteId = null;
 
-        // Mock authentication functions
-        function showRegister() {
+        function showRegisterForm() {
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
         }
 
-        function showLogin() {
+        function showLoginForm() {
             document.getElementById('registerForm').classList.add('hidden');
             document.getElementById('loginForm').classList.remove('hidden');
         }
 
-        function showMessage(msg, isError = false) {
-            const msgDiv = document.getElementById('authMessage');
-            msgDiv.innerHTML = `<div class="${isError ? 'error' : 'success'}">${msg}</div>`;
-            setTimeout(() => msgDiv.innerHTML = '', 3000);
+        function showMsg(text, error) {
+            var div = document.getElementById('authMessage');
+            var className = error ? 'error' : 'success';
+            div.innerHTML = '<div class="' + className + '">' + text + '</div>';
+            setTimeout(function() {
+                div.innerHTML = '';
+            }, 3000);
         }
 
-        function register() {
-            const username = document.getElementById('regUsername').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
+        function doRegister() {
+            var username = document.getElementById('regUsername').value;
+            var email = document.getElementById('regEmail').value;
+            var password = document.getElementById('regPassword').value;
             
             if (!username || !email || !password) {
-                showMessage('All fields required', true);
+                showMsg('All fields required', true);
                 return;
             }
             
-            // Check if user already exists
-            if (mockUsers.find(u => u.email === email)) {
-                showMessage('User already exists', true);
-                return;
+            // check if user exists
+            for (var i = 0; i < allUsers.length; i++) {
+                if (allUsers[i].email === email) {
+                    showMsg('User already exists', true);
+                    return;
+                }
             }
             
-            // Create new user
-            const newUser = {
-                id: mockUsers.length + 1,
-                username,
-                email,
-                password, // In real app, this would be hashed
+            // add user
+            var newUser = {
+                id: allUsers.length + 1,
+                username: username,
+                email: email,
+                password: password,
                 role: 'user'
             };
             
-            mockUsers.push(newUser);
-            showMessage('Registration successful! Please login.');
-            showLogin();
+            allUsers.push(newUser);
+            showMsg('Registration successful! Please login.');
+            showLoginForm();
             
-            // Clear form
+            // clear form
             document.getElementById('regUsername').value = '';
             document.getElementById('regEmail').value = '';
             document.getElementById('regPassword').value = '';
         }
 
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+        function doLogin() {
+            var email = document.getElementById('loginEmail').value;
+            var password = document.getElementById('loginPassword').value;
             
             if (!email || !password) {
-                showMessage('Email and password required', true);
+                showMsg('Email and password required', true);
                 return;
             }
             
-            // Find user
-            const user = mockUsers.find(u => u.email === email && u.password === password);
+            // find user
+            var user = null;
+            for (var i = 0; i < allUsers.length; i++) {
+                if (allUsers[i].email === email && allUsers[i].password === password) {
+                    user = allUsers[i];
+                    break;
+                }
+            }
             
             if (user) {
-                authToken = 'mock-token-' + user.id;
-                currentUser = user;
+                currentToken = 'token_' + user.id;
+                loggedInUser = user;
                 showApp();
-                loadNotes();
+                loadAllNotes();
             } else {
-                showMessage('Invalid credentials', true);
+                showMsg('Invalid credentials', true);
             }
         }
 
         function showApp() {
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('appSection').classList.remove('hidden');
-            document.getElementById('userInfo').textContent = `Welcome, ${currentUser.username}`;
+            document.getElementById('userInfo').textContent = 'Welcome, ' + loggedInUser.username;
         }
 
-        function logout() {
-            authToken = null;
-            currentUser = null;
+        function doLogout() {
+            currentToken = null;
+            loggedInUser = null;
             
             document.getElementById('authSection').classList.remove('hidden');
             document.getElementById('appSection').classList.add('hidden');
             
-            // Clear forms
+            // clear forms
             document.getElementById('loginEmail').value = '';
             document.getElementById('loginPassword').value = '';
         }
 
-        function showCreateNote() {
+        function showNewNote() {
             document.getElementById('createNoteForm').classList.remove('hidden');
         }
 
-        function hideCreateNote() {
+        function hideNewNote() {
             document.getElementById('createNoteForm').classList.add('hidden');
             document.getElementById('noteTitle').value = '';
             document.getElementById('noteBody').value = '';
             document.getElementById('noteTags').value = '';
         }
 
-        function createNote() {
-            const title = document.getElementById('noteTitle').value.trim();
-            const body = document.getElementById('noteBody').value.trim();
-            const tagsInput = document.getElementById('noteTags').value.trim();
-            const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t.length > 0) : [];
+        function saveNote() {
+            var title = document.getElementById('noteTitle').value;
+            var body = document.getElementById('noteBody').value;
+            var tagsInput = document.getElementById('noteTags').value;
+            var tags = [];
+            
+            if (tagsInput) {
+                var tagParts = tagsInput.split(',');
+                for (var i = 0; i < tagParts.length; i++) {
+                    var tag = tagParts[i].trim();
+                    if (tag.length > 0) {
+                        tags.push(tag);
+                    }
+                }
+            }
 
             if (!title) {
                 alert('Title is required');
                 return;
             }
             
-            // Create new note
-            const newNote = {
-                id: mockNoteId++,
-                title,
-                body,
-                tags,
-                author_id: currentUser.id,
-                author_name: currentUser.username,
+            var newNote = {
+                id: nextNoteId++,
+                title: title,
+                body: body,
+                tags: tags,
+                author_id: loggedInUser.id,
+                author_name: loggedInUser.username,
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString()
             };
             
-            mockNotes.unshift(newNote); // Add to beginning of array
-            hideCreateNote();
-            loadNotes();
+            allNotes.push(newNote);
+            hideNewNote();
+            loadAllNotes();
         }
 
-        function loadNotes(searchQuery = '') {
-            let notesToDisplay = mockNotes.filter(note => {
-                if (!searchQuery) return true;
-                
-                const search = searchQuery.toLowerCase();
-                return note.title.toLowerCase().includes(search) || 
-                       note.body.toLowerCase().includes(search) ||
-                       note.tags.some(tag => tag.toLowerCase().includes(search));
-            });
+        function loadAllNotes(searchQuery) {
+            var notesToShow = [];
             
-            displayNotes(notesToDisplay);
+            for (var i = 0; i < allNotes.length; i++) {
+                var note = allNotes[i];
+                var shouldInclude = true;
+                
+                if (searchQuery) {
+                    var search = searchQuery.toLowerCase();
+                    var titleMatch = note.title.toLowerCase().indexOf(search) >= 0;
+                    var bodyMatch = note.body && note.body.toLowerCase().indexOf(search) >= 0;
+                    var tagMatch = false;
+                    
+                    for (var j = 0; j < note.tags.length; j++) {
+                        if (note.tags[j].toLowerCase().indexOf(search) >= 0) {
+                            tagMatch = true;
+                            break;
+                        }
+                    }
+                    
+                    shouldInclude = titleMatch || bodyMatch || tagMatch;
+                }
+                
+                if (shouldInclude) {
+                    notesToShow.push(note);
+                }
+            }
+            
+            renderNotes(notesToShow);
         }
 
-        function displayNotes(notes) {
-            const container = document.getElementById('notesContainer');
+        function renderNotes(notes) {
+            var container = document.getElementById('notesContainer');
 
             if (notes.length === 0) {
                 container.innerHTML = '<p style="color: white;">No notes found. Create your first note!</p>';
                 return;
             }
 
-            container.innerHTML = notes.map(note => `
-                <div class="note-item">
-                    <div class="note-title">${note.title}</div>
-                    <div class="note-body">${note.body || ''}</div>
-                    <div class="note-meta">
-                        By: ${note.author_name} | Created: ${new Date(note.created_at).toLocaleDateString()}
-                        ${note.updated_at !== note.created_at ? `| Updated: ${new Date(note.updated_at).toLocaleDateString()}` : ''}
-                    </div>
-                    <div class="note-tags">
-                        ${note.tags && note.tags.length > 0 ? 'Tags: ' + note.tags.map(t => `<span class="tag">${t}</span>`).join(' ') : ''}
-                    </div>
-                    <div>
-                        ${note.author_id === currentUser.id || currentUser.role === 'admin' ? `
-                            <button onclick="editNote(${note.id}, '${note.title.replace(/'/g, "\\'")}', '${(note.body || '').replace(/'/g, "\\'")}', '${note.tags.join(', ')}')">Edit</button>
-                            <button onclick="deleteNote(${note.id})" class="btn-danger">Delete</button>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
+            var html = '';
+            for (var i = 0; i < notes.length; i++) {
+                var note = notes[i];
+                var createdDate = new Date(note.created_at).toLocaleDateString();
+                var updatedDate = new Date(note.updated_at).toLocaleDateString();
+                var isUpdated = note.created_at !== note.updated_at;
+                
+                var tagsHtml = '';
+                if (note.tags && note.tags.length > 0) {
+                    tagsHtml = 'Tags: ';
+                    for (var j = 0; j < note.tags.length; j++) {
+                        tagsHtml += '<span class="tag">' + note.tags[j] + '</span>';
+                        if (j < note.tags.length - 1) tagsHtml += ' ';
+                    }
+                }
+                
+                var actionsHtml = '';
+                if (note.author_id === loggedInUser.id) {
+                    // need to escape quotes
+                    var escapedTitle = note.title.replace(/'/g, "\\'");
+                    var escapedBody = (note.body || '').replace(/'/g, "\\'");
+                    var escapedTags = note.tags.join(', ').replace(/'/g, "\\'");
+                    
+                    actionsHtml = '<button onclick="openEdit(' + note.id + ', \'' + escapedTitle + '\', \'' + escapedBody + '\', \'' + escapedTags + '\')">Edit</button>' +
+                                  '<button onclick="deleteNote(' + note.id + ')" class="btn-danger">Delete</button>';
+                }
+
+                html += '<div class="note-item">' +
+                        '<div class="note-title">' + note.title + '</div>' +
+                        '<div class="note-body">' + (note.body || '') + '</div>' +
+                        '<div class="note-meta">' +
+                        'By: ' + note.author_name + ' | Created: ' + createdDate +
+                        (isUpdated ? ' | Updated: ' + updatedDate : '') +
+                        '</div>' +
+                        '<div class="note-tags">' + tagsHtml + '</div>' +
+                        '<div>' + actionsHtml + '</div>' +
+                        '</div>';
+            }
+            
+            container.innerHTML = html;
         }
 
-        function editNote(id, title, body, tags) {
+        function openEdit(id, title, body, tags) {
             editingNoteId = id;
             document.getElementById('editTitle').value = title;
             document.getElementById('editBody').value = body;
-            document.getElementById('editTagsInput').value = tags;
+            document.getElementById('editTags').value = tags;
             document.getElementById('editModal').style.display = 'block';
         }
 
-        function closeEditModal() {
+        function closeEdit() {
             document.getElementById('editModal').style.display = 'none';
             editingNoteId = null;
         }
 
-        function updateNote() {
-            const title = document.getElementById('editTitle').value.trim();
-            const body = document.getElementById('editBody').value.trim();
-            const tagsInput = document.getElementById('editTagsInput').value.trim();
-            const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t.length > 0) : [];
+        function saveEdit() {
+            var title = document.getElementById('editTitle').value;
+            var body = document.getElementById('editBody').value;
+            var tagsInput = document.getElementById('editTags').value;
+            var tags = [];
+            
+            if (tagsInput) {
+                var tagParts = tagsInput.split(',');
+                for (var i = 0; i < tagParts.length; i++) {
+                    var tag = tagParts[i].trim();
+                    if (tag.length > 0) {
+                        tags.push(tag);
+                    }
+                }
+            }
             
             if (!title) {
                 alert('Title required');
                 return;
             }
             
-            // Find and update the note
-            const noteIndex = mockNotes.findIndex(note => note.id === editingNoteId);
-            if (noteIndex !== -1) {
-                mockNotes[noteIndex].title = title;
-                mockNotes[noteIndex].body = body;
-                mockNotes[noteIndex].tags = tags;
-                mockNotes[noteIndex].updated_at = new Date().toISOString();
+            // find and update note
+            for (var i = 0; i < allNotes.length; i++) {
+                if (allNotes[i].id === editingNoteId) {
+                    allNotes[i].title = title;
+                    allNotes[i].body = body;
+                    allNotes[i].tags = tags;
+                    allNotes[i].updated_at = new Date().toISOString();
+                    break;
+                }
             }
             
-            closeEditModal();
-            loadNotes();
+            closeEdit();
+            loadAllNotes();
         }
 
         function deleteNote(noteId) {
@@ -514,26 +582,27 @@
                 return;
             }
             
-            const noteIndex = mockNotes.findIndex(note => note.id === noteId);
-            if (noteIndex !== -1) {
-                mockNotes.splice(noteIndex, 1);
-                loadNotes();
+            for (var i = 0; i < allNotes.length; i++) {
+                if (allNotes[i].id === noteId) {
+                    allNotes.splice(i, 1);
+                    break;
+                }
             }
+            loadAllNotes();
         }
 
-        let searchTimeout;
-        function searchNotes() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                const query = document.getElementById('searchInput').value;
-                loadNotes(query);
-            }, 500);
+        var searchTimer;
+        function doSearch() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function() {
+                var query = document.getElementById('searchInput').value;
+                loadAllNotes(query);
+            }, 400);
         }
 
-        // Initialize with a demo user for testing
+        // add demo user when page loads
         window.onload = function() {
-            // Create a demo user
-            mockUsers.push({
+            allUsers.push({
                 id: 1,
                 username: 'demo',
                 email: 'demo@example.com',

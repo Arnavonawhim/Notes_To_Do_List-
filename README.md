@@ -26,3 +26,8 @@ Colaborator Invite:
 
 NLQ:
 <img width="1272" height="849" alt="image" src="https://github.com/user-attachments/assets/b729e27f-afdf-44c0-ab38-29a5c8bba5d8" />
+
+
+added fronted with extended deadline:
+https://www.canva.com/design/DAGw6uk4Q44/n2qgWSQRTQFfazZZZVFHZw/edit?utm_content=DAGw6uk4Q44&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
